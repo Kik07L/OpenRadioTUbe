@@ -1,20 +1,7 @@
-<?php
-// Récupérer les informations de la vidéo depuis l'API YouTube Data
-$videoId = "jfKfPfyJRdk"; // Remplacez par l'identifiant de la vidéo
-$apiKey = "AIzaSyDJjyd4DHYoInyWNhCS4TiDPOAY7JXx40U"; // Remplacez par votre clé d'API YouTube Data
-
-$apiUrl = "https://www.googleapis.com/youtube/v3/videos?part=snippet&id=" . $videoId . "&key=" . $apiKey;
-$response = file_get_contents($apiUrl);
-$data = json_decode($response, true);
-
-$thumbnailUrl = $data['items'][0]['snippet']['thumbnails']['medium']['url'];
-$videoTitle = $data['items'][0]['snippet']['title'];
-?>
-
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Mon site web</title>
+  <title>Radiotube</title>
   <style>
     body {
       margin: 0;
@@ -45,15 +32,91 @@ $videoTitle = $data['items'][0]['snippet']['title'];
       font-size: 24px;
       margin-bottom: 20px;
     }
+    #play-button {
+      background-color: #fff;
+      color: #000;
+      font-size: 18px;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
-  <div id="video-container">
-    <iframe width="100%" height="100%" src="https://www.youtube.com/embed/<?php echo $videoId; ?>?autoplay=1&controls=0&loop=1&playlist=<?php echo $videoId; ?>&mute=1&rel=0&showinfo=0" frameborder="0" allowfullscreen></iframe>
-  </div>
+  <div id="video-container"></div>
   <div id="content">
-    <img id="thumbnail" src="<?php echo $thumbnailUrl; ?>" alt="Music Thumbnail">
-    <h1 id="title"><?php echo $videoTitle; ?></h1>
+    <img id="thumbnail" src="" alt="Music Thumbnail">
+    <h1 id="title"></h1>
+    <button id="play-button">Play</button>
   </div>
+
+  <script>
+    // Variables
+    var videoId = "jfKfPfyJRdk"; // Remplacez par l'identifiant de la vidéo
+    var thumbnailUrl = ""; // URL de la miniature de la vidéo
+    var videoTitle = ""; // Titre de la vidéo
+    var player; // Variable pour stocker l'objet du lecteur YouTube
+
+    // Fonction pour charger la vidéo YouTube
+    function loadYouTubeVideo() {
+      var videoPlayer = new YT.Player('video-container', {
+        videoId: videoId,
+        playerVars: {
+          autoplay: 1,
+          controls: 0,
+          loop: 1,
+          playlist: videoId,
+          mute: 1,
+          rel: 0,
+          showinfo: 0
+        },
+        events: {
+          onReady: function(event) {
+            player = event.target;
+          }
+        }
+      });
+    }
+
+    // Fonction pour jouer ou mettre en pause la vidéo
+    function togglePlay() {
+      if (player.getPlayerState() === YT.PlayerState.PLAYING) {
+        player.pauseVideo();
+        document.getElementById("play-button").innerHTML = "Play";
+      } else {
+        player.playVideo();
+        document.getElementById("play-button").innerHTML = "Pause";
+      }
+    }
+
+    // Récupérer les informations de la vidéo depuis l'API YouTube Data
+    var apiUrl = "https://www.googleapis.com/youtube/v3/videos?part=snippet&id=" + videoId + "&key=AIzaSyDJjyd4DHYoInyWNhCS4TiDPOAY7JXx40U";
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", apiUrl, true);
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        var response = JSON.parse(xhr.responseText);
+        thumbnailUrl = response.items[0].snippet.thumbnails.medium.url;
+        videoTitle = response.items[0].snippet.title;
+        document.getElementById("thumbnail").src = thumbnailUrl;
+        document.getElementById("title").innerHTML = videoTitle;
+      }
+    };
+    xhr.send();
+
+    // Chargement de l'API YouTube Iframe Player
+    var tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+    // Appel de la fonction loadYouTubeVideo lorsque l'API est prête
+    window.onYouTubeIframeAPIReady = function() {
+      loadYouTubeVideo();
+    };
+
+    // Écouteur d'événement pour le bouton de lecture/pause
+    document.getElementById("play-button").addEventListener("click", togglePlay);
+  </script>
 </body>
 </html>
