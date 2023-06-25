@@ -17,6 +17,7 @@
       width: 100%;
       height: 100%;
       z-index: -1;
+      filter: blur(10px); /* Ajout du flou */
     }
     #content {
       text-align: center;
@@ -73,6 +74,8 @@
         events: {
           onReady: function(event) {
             player = event.target;
+            player.unMute(); // Ajout de la désactivation du mode muet
+            player.setVolume(50); // Réglage du volume à 50%
           }
         }
       });
@@ -90,7 +93,7 @@
     }
 
     // Récupérer les informations de la vidéo depuis l'API YouTube Data
-    var apiUrl = "https://www.googleapis.com/youtube/v3/videos?part=snippet&id=" + videoId + "&key=AIzaSyDJjyd4DHYoInyWNhCS4TiDPOAY7JXx40U";
+    var apiUrl = "https://www.googleapis.com/youtube/v3/videos?part=snippet&id=" + videoId + "&key=YOUR_API_KEY";
     var xhr = new XMLHttpRequest();
     xhr.open("GET", apiUrl, true);
     xhr.onreadystatechange = function() {
