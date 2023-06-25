@@ -21,7 +21,7 @@
       width: 100%;
       height: 120%;
       z-index: -1;
-      filter: blur(40px); 
+      filter: blur(40px);
     }
     #content {
       text-align: center;
@@ -32,7 +32,7 @@
       height: 300px;
       object-fit: cover;
       border-radius: 5px;
-      box-shadow: 0 0 15px rgba(44, 42, 42, 0.5); 
+      box-shadow: 0 0 15px rgba(44, 42, 42, 0.5);
     }
     #title {
       font-size: 26px;
@@ -71,11 +71,11 @@
   </div>
 
   <script>
-    // replace videoid by your id ( lofi girl example : jfKfPfyJRdk)
-    var videoId = "jfKfPfyJRdk"; 
+    var videoId = ""; 
     var thumbnailUrl = ""; 
     var videoTitle = ""; 
     var player; 
+
 
     function loadYouTubeVideo() {
       var videoPlayer = new YT.Player('video-container', {
@@ -92,14 +92,13 @@
         events: {
           onReady: function(event) {
             player = event.target;
-            player.unMute();
-            player.setVolume(50);
+            player.unMute(); 
+            player.setVolume(50); 
           }
         }
       });
     }
 
-  
     function togglePlay() {
       if (player.getPlayerState() === YT.PlayerState.PLAYING) {
         player.pauseVideo();
@@ -110,32 +109,36 @@
       }
     }
 
-    // place your youtube V3 api key in API_KEY_HERE
-    var apiUrl = "https://www.googleapis.com/youtube/v3/videos?part=snippet&id=" + videoId + "&key=API_KEY_HERE";
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", apiUrl, true);
-    xhr.onreadystatechange = function() {
-      if (xhr.readyState === 4 && xhr.status === 200) {
-        var response = JSON.parse(xhr.responseText);
-        thumbnailUrl = response.items[0].snippet.thumbnails.medium.url;
-        videoTitle = response.items[0].snippet.title;
-        document.getElementById("thumbnail").src = thumbnailUrl;
-        document.getElementById("title").innerHTML = videoTitle;
-      }
-    };
-    xhr.send();
+    // Replace YOUR_API_KEY by your youbube V3 api key
+    function fetchVideoInfo() {
+      var apiUrl = "https://www.googleapis.com/youtube/v3/videos?part=snippet&id=" + videoId + "&key=YOUR_API_KEY";
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", apiUrl, true);
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          var response = JSON.parse(xhr.responseText);
+          thumbnailUrl = response.items[0].snippet.thumbnails.medium.url;
+          videoTitle = response.items[0].snippet.title;
+          document.getElementById("thumbnail").src = thumbnailUrl;
+          document.getElementById("title").innerHTML = videoTitle;
+        }
+      };
+      xhr.send();
+    }
 
-  
     var tag = document.createElement('script');
     tag.src = "https://www.youtube.com/iframe_api";
     var firstScriptTag = document.getElementsByTagName('script')[0];
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-
     window.onYouTubeIframeAPIReady = function() {
-      loadYouTubeVideo();
+      var userInput = prompt("enter your video ID pliz :");
+      if (userInput) {
+        videoId = userInput;
+        loadYouTubeVideo();
+        fetchVideoInfo();
+      }
     };
-
 
     document.getElementById("play-button").addEventListener("click", togglePlay);
   </script>
