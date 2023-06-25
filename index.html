@@ -9,6 +9,10 @@
       background-color: #000;
       color: #fff;
       font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
     }
     #video-container {
       position: fixed;
@@ -28,10 +32,12 @@
       height: 200px;
       object-fit: cover;
       border-radius: 5px;
+      box-shadow: 0 0 15px rgba(44, 42, 42, 0.5); /* Ajout de l'ombre */
     }
     #title {
       font-size: 24px;
       margin-bottom: 20px;
+      animation: rainbow 10s infinite; /* Ajout de l'animation arc-en-ciel */
     }
     #play-button {
       background-color: #fff;
@@ -40,6 +46,19 @@
       padding: 10px 20px;
       border-radius: 5px;
       cursor: pointer;
+      box-shadow: 0 0 15px rgba(44, 42, 42, 0.5);
+    }
+    
+    /* Animation arc-en-ciel */
+    @keyframes rainbow {
+      0% { color: red; }
+      14% { color: orange; }
+      28% { color: yellow; }
+      42% { color: green; }
+      57% { color: blue; }
+      71% { color: indigo; }
+      85% { color: violet; }
+      100% { color: red; }
     }
   </style>
 </head>
