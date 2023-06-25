@@ -21,7 +21,7 @@
       width: 100%;
       height: 120%;
       z-index: -1;
-      filter: blur(40px); /* Ajout du flou */
+      filter: blur(40px); 
     }
     #content {
       text-align: center;
@@ -32,25 +32,24 @@
       height: 300px;
       object-fit: cover;
       border-radius: 5px;
-      box-shadow: 0 0 15px rgba(44, 42, 42, 0.5); /* Ajout de l'ombre */
+      box-shadow: 0 0 15px rgba(44, 42, 42, 0.5); 
     }
     #title {
       font-size: 26px;
       margin-bottom: 22px;
-      animation: rainbow 20s infinite; /* Ajout de l'animation arc-en-ciel */
+      animation: rainbow 20s infinite;
       text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
     }
     #play-button {
-      background-color: #fff;
-      color: #000;
+      background-color: #4444446b;
+      color: #ffffff;
       font-size: 18px;
       padding: 10px 20px;
-      border-radius: 5px;
+      border-radius: 1px;
       cursor: pointer;
       box-shadow: 0 0 15px rgba(44, 42, 42, 0.5);
     }
     
-    /* Animation arc-en-ciel */
     @keyframes rainbow {
       0% { color: red; }
       14% { color: orange; }
@@ -72,13 +71,12 @@
   </div>
 
   <script>
-    // Variables
-    var videoId = "jfKfPfyJRdk"; // Remplacez par l'identifiant de la vidéo
-    var thumbnailUrl = ""; // URL de la miniature de la vidéo
-    var videoTitle = ""; // Titre de la vidéo
-    var player; // Variable pour stocker l'objet du lecteur YouTube
+    // replace videoid by your id ( lofi girl example : jfKfPfyJRdk)
+    var videoId = "jfKfPfyJRdk"; 
+    var thumbnailUrl = ""; 
+    var videoTitle = ""; 
+    var player; 
 
-    // Fonction pour charger la vidéo YouTube
     function loadYouTubeVideo() {
       var videoPlayer = new YT.Player('video-container', {
         videoId: videoId,
@@ -94,14 +92,14 @@
         events: {
           onReady: function(event) {
             player = event.target;
-            player.unMute(); // Ajout de la désactivation du mode muet
-            player.setVolume(50); // Réglage du volume à 50%
+            player.unMute();
+            player.setVolume(50);
           }
         }
       });
     }
 
-    // Fonction pour jouer ou mettre en pause la vidéo
+  
     function togglePlay() {
       if (player.getPlayerState() === YT.PlayerState.PLAYING) {
         player.pauseVideo();
@@ -112,8 +110,8 @@
       }
     }
 
-    // Récupérer les informations de la vidéo depuis l'API YouTube Data
-    var apiUrl = "https://www.googleapis.com/youtube/v3/videos?part=snippet&id=" + videoId + "&key=AIzaSyDJjyd4DHYoInyWNhCS4TiDPOAY7JXx40U";
+    // place your youtube V3 api key in API_KEY_HERE
+    var apiUrl = "https://www.googleapis.com/youtube/v3/videos?part=snippet&id=" + videoId + "&key=API_KEY_HERE";
     var xhr = new XMLHttpRequest();
     xhr.open("GET", apiUrl, true);
     xhr.onreadystatechange = function() {
@@ -127,18 +125,18 @@
     };
     xhr.send();
 
-    // Chargement de l'API YouTube Iframe Player
+  
     var tag = document.createElement('script');
     tag.src = "https://www.youtube.com/iframe_api";
     var firstScriptTag = document.getElementsByTagName('script')[0];
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-    // Appel de la fonction loadYouTubeVideo lorsque l'API est prête
+
     window.onYouTubeIframeAPIReady = function() {
       loadYouTubeVideo();
     };
 
-    // Écouteur d'événement pour le bouton de lecture/pause
+
     document.getElementById("play-button").addEventListener("click", togglePlay);
   </script>
 </body>
